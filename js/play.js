@@ -24,8 +24,11 @@ var playState = {
 
 
 		game.physics.arcade.enable(this.eggTopLeft);
+		this.topLeftEggPosition = 0;
+		this.maxNum = 4;
 
-		game.time.events.loop(500, this.updateEggPosition,this);
+		this.eggDropLoop = game.time.events.loop(500, this.updateEggPosition,this);
+		// eggDroploop;
 		// this.updateEggPosition();
   	
 
@@ -79,30 +82,22 @@ var playState = {
 
 
 	updateEggPosition:function(){
+		// console.log(playState.topLeftEggPosition);
+		this.topLeftEggPosition += 1;
+		
+
+
 		var eggPositionTopLeft = [
 			{x: 70, y: 147}, {x: 95, y: 160},
 			{x: 120, y: 173}, {x: 145, y: 186},
 			{x:175, y:220}
 		];
 
-		for (var i = 0; i < eggPositionTopLeft.length; i++) {
-			if (eggPositionTopLeft[i].x === this.eggTopLeft.x) {
-			eggPositionTopLeft.splice(i, 1);
-			};
-		// var newPosition = eggPositionTopLeft[i];
-		// // Set the new position of the coin
-		// this.eggTopLeft.reset(newPosition.x, newPosition.y);
-		}
+		this.eggTopLeft.reset(eggPositionTopLeft[this.topLeftEggPosition].x, eggPositionTopLeft[this.topLeftEggPosition].y);
 
-
-		var newPosition = eggPositionTopLeft[
-		game.rnd.integerInRange(0, eggPositionTopLeft.length-1)];
-		// Set the new position of the coin
-		this.eggTopLeft.reset(newPosition.x, newPosition.y);
-
-		
-
-
+		if (this.topLeftEggPosition >= this.maxNum) {
+			game.time.events.remove(this.eggDropLoop);
+		};
 	}
 
 }
