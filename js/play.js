@@ -3,14 +3,17 @@ var playState = {
 		this.cursor = game.input.keyboard.createCursorKeys();
 		game.add.image(0,0,'background');
 
-		this.wolfLeftDown = game.add.sprite(269, 320,
-	'wolfLeftDown');
-		this.wolfLeftDown.anchor.setTo(0.5, 0.5);
-		game.physics.arcade.enable(this.wolfLeftDown);
-		this.wolfRightDown = game.add.sprite(511, 320,
-	'wolfRightDown');
-		this.wolfRightDown.anchor.setTo(0.5, 0.5);
-		game.physics.arcade.enable(this.wolfRightDown);
+		this.wolf = game.add.sprite(269, 320,'wolfLeftDown');
+		this.wolf.anchor.setTo(0.5, 0.5);
+		// game.physics.arcade.enable(this.wolfLeftDown);
+		// this.wolfRightDown = game.add.sprite(511, 320,'wolfRightDown');
+		// this.wolfRightDown.anchor.setTo(0.5, 0.5);
+		// game.physics.arcade.enable(this.wolfRightDown);
+
+		// this.wolfLeftUp = game.add.sprite(269,320,'wolfLeftUp');
+		// this.wolfLeftUp.anchor.setTo(0.5,0.5);
+		// this.wolfRightUp = game.add.sprite(511,320,'wolfRightUp');
+		// this.wolfRightUp.anchor.setTo(0.5,0.5);
 
 		
 		this.createShelves();
@@ -18,6 +21,20 @@ var playState = {
 		this.createChickens();
 
 
+		var catchLeftDown = game.input.keyboard.addKey(Phaser.Keyboard.V);
+		catchLeftDown.onDown.add(this.catchLeftDown, this);
+
+		var catchRightDown = game.input.keyboard.addKey(Phaser.Keyboard.N);
+		// When the 'upKey' is pressed, it will call the 'start' function once
+		catchRightDown.onDown.add(this.catchRightDown, this);
+
+		var catchLeftUp = game.input.keyboard.addKey(Phaser.Keyboard.E);
+		// When the 'upKey' is pressed, it will call the 'start' function once
+		catchLeftUp.onDown.add(this.catchLeftUp, this);
+
+		var catchRightUp = game.input.keyboard.addKey(Phaser.Keyboard.I);
+		// When the 'upKey' is pressed, it will call the 'start' function once
+		catchRightUp.onDown.add(this.catchRightUp, this);
 
 		// game.physics.arcade.enable(this.eggTopLeft);
 
@@ -32,10 +49,33 @@ var playState = {
 		chickenArray = [1,2,3,4];
 	},
 
+
+	catchLeftDown: function(){
+		this.wolf.kill();
+		this.wolf = game.add.sprite(269, 320,'wolfLeftDown');
+		this.wolf.anchor.setTo(0.5, 0.5);
+	},
+	catchRightDown: function(){
+		this.wolf.kill();
+		this.wolf = game.add.sprite(511, 320,'wolfRightDown');
+		this.wolf.anchor.setTo(0.5, 0.5);
+	},
+	catchLeftUp: function(){
+		this.wolf.kill();
+		this.wolf = game.add.sprite(269,320,'wolfLeftUp');
+		this.wolf.anchor.setTo(0.5,0.5);
+	},
+	catchRightUp: function(){
+		this.wolf.kill();
+		this.wolf = game.add.sprite(511,320,'wolfRightUp');
+		this.wolf.anchor.setTo(0.5,0.5);
+	},
+
 	update:function(){
+
 		if (this.nextEggTime < game.time.now) {
 		
-		var challenge = 1;
+		var challenge = 2;
 		var delay = 1000 * challenge;
 
 		// Create a new egg, and update the 'nextEgg' time
@@ -118,6 +158,7 @@ var playState = {
 		game.add.sprite(610,250,'rightShelf',0,this.shelves); //right bot
 		this.shelves.setAll('body.immovable', true);
 	},
+
 
 
 	updateTopLeftEggPosition:function(){
