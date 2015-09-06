@@ -2,7 +2,7 @@ var playState = {
 	create: function() {
 		this.cursor = game.input.keyboard.createCursorKeys();
 		game.add.image(0,0,'background');
-		// the wolf image size is 110X115 (WxH);
+
 		this.wolfLeftDown = game.add.sprite(269, 320,
 	'wolfLeftDown');
 		this.wolfLeftDown.anchor.setTo(0.5, 0.5);
@@ -16,42 +16,81 @@ var playState = {
 		this.createShelves();
 		
 		this.createChickens();
-		this.eggTopLeft = game.add.sprite(70,147,'egg');  //70,147
-		// this.eggTopLeft = game.add.sprite(95,160,'egg'); 
-		// this.eggTopLeft = game.add.sprite(120,173,'egg'); 
-		// this.eggTopLeft = game.add.sprite(145,186,'egg'); 
-		// this.eggTopLeft = game.add.sprite(175,220,'egg');
 
 
-		game.physics.arcade.enable(this.eggTopLeft);
+
+		// game.physics.arcade.enable(this.eggTopLeft);
+
+		// initialization for each egg
 		this.topLeftEggPosition = 0;
+		this.downLeftEggPosition = 0;
+		this.topRightEggPosition = 0;
+		this.downRightEggPosition = 0;
 		this.maxNum = 4;
 
-		this.eggDropLoop = game.time.events.loop(500, this.updateEggPosition,this);
-		// eggDroploop;
-		// this.updateEggPosition();
-  	
-
-
-
-
-		this.EggTime = 0;
-
+		this.nextEggTime = 0;
+		chickenArray = [1,2,3,4];
 	},
 
 	update:function(){
-		this.game.physics.arcade.collide(this.eggTopLeft, this.groundlayer);
+		if (this.nextEggTime < game.time.now) {
+		
+		var challenge = 1;
+		var delay = 1000 * challenge;
+
+		// Create a new egg, and update the 'nextEgg' time
+		this.chicken = chickenArray[game.rnd.integerInRange(0, chickenArray.length-1)];
+
+		if (this.chicken == 1 ){
+			this.eggTopLeft = game.add.sprite(70,147,'egg');
+			this.topLeftEggDropLoop = game.time.events.loop(500 * challenge, this.updateTopLeftEggPosition,this);
+
+			var chickenIndex = chickenArray.indexOf(1);
+			chickenArray.splice(chickenIndex,1);
+
+			setTimeout(function(){
+				chickenArray.push(1);
+			},2500 * challenge);
+		};
+		if (this.chicken == 2) {
+			this.eggDownLeft = game.add.sprite(70,257,'egg');
+			this.downLeftEggDropLoop = game.time.events.loop(500 * challenge, this.updateDownLeftEggPosition,this);
+
+			var chickenIndex = chickenArray.indexOf(2);
+			chickenArray.splice(chickenIndex,1);
+
+			setTimeout(function(){
+				chickenArray.push(2);
+			},2500 * challenge);
+		};
+
+		if (this.chicken == 3) {
+			this.eggTopRight = game.add.sprite(680,147,'egg');
+			this.topRightEggDropLoop = game.time.events.loop(500 * challenge, this.updateTopRightEggPosition,this);
+
+			var chickenIndex = chickenArray.indexOf(3);
+			chickenArray.splice(chickenIndex,1);
+
+			setTimeout(function(){
+				chickenArray.push(3);
+			},2500 * challenge);
+		};
+
+		if (this.chicken == 4) {
+			this.eggDownRight = game.add.sprite(680,257,'egg');
+			this.downRightEggDropLoop = game.time.events.loop(500 * challenge, this.updateDownRightEggPosition,this);
+
+			var chickenIndex = chickenArray.indexOf(4);
+			chickenArray.splice(chickenIndex,1);
+
+			setTimeout(function(){
+				chickenArray.push(4);
+			},2500 * challenge);
+		};
 
 
-		// if (this.EggTime < game.time.now) {
-		// // Define our variables
-		// // var start = 4000, end = 1000, score = 100;
-		// // Formula to decrease the delay between enemies over time
-		// // At first it's 4000ms, then slowly goes to 1000ms
-		// var delay = Math.max(start - (start-end)*game.global.score/score, end);
-		// // Create a new enemy, and update the 'nextEnemy' time
-		// this.updateEggPosition();
-		// this.nextEnemy = game.time.now + delay;
+		this.nextEggTime = game.time.now + delay;
+		};
 
 
 
@@ -81,23 +120,104 @@ var playState = {
 	},
 
 
-	updateEggPosition:function(){
+	updateTopLeftEggPosition:function(){
+		
+ 		// this piece is for infinite loop: 
 		// console.log(playState.topLeftEggPosition);
-		this.topLeftEggPosition += 1;
+		// if (this.topLeftEggPosition > this.maxNum) {
+		// 	this.topLeftEggPosition = 0;
+		// };
+
+		
+		if (this.topLeftEggPosition >= this.maxNum) {
+			this.eggTopLeft.kill();
+			this.topLeftEggPosition = 0;
+			game.time.events.remove(this.topLeftEggDropLoop);
+			// this.eggTopLeft.kill();
+		} else {
+				this.topLeftEggPosition += 1;
+				var eggPositionTopLeft = [
+				{x: 70, y: 147}, {x: 95, y: 160},
+				{x: 120, y: 173}, {x: 145, y: 186},
+				{x:175, y:220}
+			];
+
+			this.eggTopLeft.reset(eggPositionTopLeft[this.topLeftEggPosition].x, eggPositionTopLeft[this.topLeftEggPosition].y);
+		};
+
+	},
+
+
+	updateDownLeftEggPosition:function(){
+
+ 		// this piece is for infinite loop: 
+		// console.log(playState.downLeftEggPosition);
+		// if (this.downLeftEggPosition > this.maxNum) {
+		// 	this.downLeftEggPosition = 0;
+		// };
+
+		// this piece is for one loop when it is called
+		if (this.downLeftEggPosition >= this.maxNum) {
+			this.eggDownLeft.kill();
+			this.downLeftEggPosition = 0;
+			game.time.events.remove(this.downLeftEggDropLoop);
+		} else {
+			this.downLeftEggPosition += 1;
+			var eggPositionDownLeft = [
+			{x: 70, y: 257}, {x: 95, y: 270},
+			{x: 120, y: 283}, {x: 145, y: 296},
+			{x:175, y:330}
+			];
+			this.eggDownLeft.reset(eggPositionDownLeft[this.downLeftEggPosition].x, eggPositionDownLeft[this.downLeftEggPosition].y);
+		}
+	},
+
+	updateTopRightEggPosition:function(){
+		// this piece is for infinite loop: 
+		// console.log(playState.topRightEggPosition);
+		// if (this.topRightEggPosition > this.maxNum) {
+		// 	this.topRightEggPosition = 0;
+		// };
 		
 
+		// this piece is for one loop when it is called
+		if (this.topRightEggPosition >= this.maxNum) {
+			this.eggTopRight.kill();
+			this.topRightEggPosition = 0;
+			game.time.events.remove(this.topRightEggDropLoop);
+		} else {
+			this.topRightEggPosition += 1;
+			var eggPositionTopRight = [
+				{x: 680, y: 147}, {x: 655, y: 160},
+				{x: 630, y: 173}, {x: 605, y: 186},
+				{x:575, y:220}
+			];
+			this.eggTopRight.reset(eggPositionTopRight[this.topRightEggPosition].x, eggPositionTopRight[this.topRightEggPosition].y);
+		}
+	},
 
-		var eggPositionTopLeft = [
-			{x: 70, y: 147}, {x: 95, y: 160},
-			{x: 120, y: 173}, {x: 145, y: 186},
-			{x:175, y:220}
-		];
 
-		this.eggTopLeft.reset(eggPositionTopLeft[this.topLeftEggPosition].x, eggPositionTopLeft[this.topLeftEggPosition].y);
+	updateDownRightEggPosition:function(){
+		// this piece is for infinite loop: 
+		// console.log(playState.downRightEggPosition);
+		// if (this.downRightEggPosition > this.maxNum) {
+		// 	this.downRightEggPosition = 0;
+		// };
 
-		if (this.topLeftEggPosition >= this.maxNum) {
-			game.time.events.remove(this.eggDropLoop);
-		};
+		// this piece is for one loop when it is called
+		if (this.downRightEggPosition >= this.maxNum) {
+			this.eggDownRight.kill();
+			this.downRightEggPosition = 0;
+			game.time.events.remove(this.downRightEggDropLoop);
+		} else {
+			this.downRightEggPosition += 1;
+				var eggPositionDownRight = [
+				{x: 680, y: 257}, {x: 655, y: 270},
+				{x: 630, y: 283}, {x: 605, y: 296},
+				{x:575, y:330}
+			];
+		this.eggDownRight.reset(eggPositionDownRight[this.downRightEggPosition].x, eggPositionDownRight[this.downRightEggPosition].y);
+		}
 	}
 
 }
