@@ -4,12 +4,16 @@ var playState = {
 		this.scoreLabel = game.add.text(30,30,'score: 0',{font: '18px Arial', fill: 'black'});
 		this.score = 0;
 		
+		this.playerLife = game.add.text(700,30,'Life: 3',{font: '18px Arial', fill: 'black'});
+		this.life = 3;
 
 		//initial image when start the game
 		this.wolf = game.add.sprite(295, 310,'leftWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
 		this.hand = game.add.sprite(175, 325,'leftDownHand');
 		game.physics.arcade.enable(this.hand);
+
+		// this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
 		
 		this.createShelves();
 		this.createChickens();
@@ -85,7 +89,7 @@ var playState = {
 
 		if (this.nextEggTime < game.time.now) {
 		
-		var challenge = 2;
+		var challenge = 3;
 		var delay = 1000 * challenge;
 
 		// Create a new egg, and update the 'nextEgg' time
@@ -198,14 +202,21 @@ var playState = {
 		this.shelves.setAll('body.immovable', true);
 	},
 
-
+	destroyEgg: function()
+	{
+		// console.log(this);
+		this.brokenEgg.kill();
+		// console.log('kill egg');
+	},
 
 	updateTopLeftEggPosition:function(){	
 		if (this.topLeftEggPosition >= this.maxNum) {
+			this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
+			setTimeout(this.destroyEgg.bind(this), 500);
+
 			this.eggTopLeft.kill();
 			this.topLeftEggPosition = 0;
 			game.time.events.remove(this.topLeftEggDropLoop);
-			// this.eggTopLeft.kill();
 		} else {
 				this.topLeftEggPosition += 1;
 				var eggPositionTopLeft = [
@@ -222,6 +233,9 @@ var playState = {
 
 	updateDownLeftEggPosition:function(){
 		if (this.downLeftEggPosition >= this.maxNum) {
+			this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
+			setTimeout(this.destroyEgg.bind(this), 500);
+
 			this.eggDownLeft.kill();
 			this.downLeftEggPosition = 0;
 			game.time.events.remove(this.downLeftEggDropLoop);
@@ -238,6 +252,10 @@ var playState = {
 
 	updateTopRightEggPosition:function(){
 		if (this.topRightEggPosition >= this.maxNum) {
+			console.log(this.eggTopRight);
+			this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
+			setTimeout(this.destroyEgg.bind(this), 500);
+		
 			this.eggTopRight.kill();
 			this.topRightEggPosition = 0;
 			game.time.events.remove(this.topRightEggDropLoop);
@@ -249,12 +267,16 @@ var playState = {
 				{x:575, y:220}
 			];
 			this.eggTopRight.reset(eggPositionTopRight[this.topRightEggPosition].x, eggPositionTopRight[this.topRightEggPosition].y);
+			// console.log(this.eggTopRight.world.x);
 		}
 	},
 
 
 	updateDownRightEggPosition:function(){
 		if (this.downRightEggPosition >= this.maxNum) {
+			this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
+			setTimeout(this.destroyEgg.bind(this), 500);
+
 			this.eggDownRight.kill();
 			this.downRightEggPosition = 0;
 			game.time.events.remove(this.downRightEggDropLoop);

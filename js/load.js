@@ -15,6 +15,7 @@ var loadState = {
 		game.load.image('rightDownHand','assets/right_down_hand.png');
 		game.load.image('leftUpHand','assets/left_up_hand.png');
 		game.load.image('rightUpHand','assets/right_up_hand.png');
+		game.load.image('brokenEgg','assets/broken-egg.png');
 
 
 
