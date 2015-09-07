@@ -1,42 +1,35 @@
 var playState = {
 	create: function() {
-		this.cursor = game.input.keyboard.createCursorKeys();
 		game.add.image(0,0,'background');
+		this.scoreLabel = game.add.text(30,30,'score: 0',{font: '18px Arial', fill: 'black'});
+		this.score = 0;
+		
 
-		this.wolf = game.add.sprite(269, 320,'wolfLeftDown');
+		//initial image when start the game
+		this.wolf = game.add.sprite(295, 310,'leftWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
-		// game.physics.arcade.enable(this.wolfLeftDown);
-		// this.wolfRightDown = game.add.sprite(511, 320,'wolfRightDown');
-		// this.wolfRightDown.anchor.setTo(0.5, 0.5);
-		// game.physics.arcade.enable(this.wolfRightDown);
-
-		// this.wolfLeftUp = game.add.sprite(269,320,'wolfLeftUp');
-		// this.wolfLeftUp.anchor.setTo(0.5,0.5);
-		// this.wolfRightUp = game.add.sprite(511,320,'wolfRightUp');
-		// this.wolfRightUp.anchor.setTo(0.5,0.5);
-
+		this.hand = game.add.sprite(175, 325,'leftDownHand');
+		game.physics.arcade.enable(this.hand);
 		
 		this.createShelves();
-		
 		this.createChickens();
 
-
-		var catchLeftDown = game.input.keyboard.addKey(Phaser.Keyboard.V);
+		//calling the move function for each hand
+		var catchLeftDown = game.input.keyboard.addKey(Phaser.Keyboard.C);
+		//when the "C" is pressed, it will call catchLeftDown function
 		catchLeftDown.onDown.add(this.catchLeftDown, this);
 
 		var catchRightDown = game.input.keyboard.addKey(Phaser.Keyboard.N);
-		// When the 'upKey' is pressed, it will call the 'start' function once
+		//when the "N" is pressed, it will call catchRightDown function
 		catchRightDown.onDown.add(this.catchRightDown, this);
 
-		var catchLeftUp = game.input.keyboard.addKey(Phaser.Keyboard.E);
-		// When the 'upKey' is pressed, it will call the 'start' function once
+		var catchLeftUp = game.input.keyboard.addKey(Phaser.Keyboard.S);
+		//when the "S" is pressed, it will call catchLeftUp function
 		catchLeftUp.onDown.add(this.catchLeftUp, this);
 
-		var catchRightUp = game.input.keyboard.addKey(Phaser.Keyboard.I);
-		// When the 'upKey' is pressed, it will call the 'start' function once
+		var catchRightUp = game.input.keyboard.addKey(Phaser.Keyboard.K);
+		//when the "K" is pressed, it will call catchRightUp function
 		catchRightUp.onDown.add(this.catchRightUp, this);
-
-		// game.physics.arcade.enable(this.eggTopLeft);
 
 		// initialization for each egg
 		this.topLeftEggPosition = 0;
@@ -49,29 +42,46 @@ var playState = {
 		chickenArray = [1,2,3,4];
 	},
 
-
 	catchLeftDown: function(){
 		this.wolf.kill();
-		this.wolf = game.add.sprite(269, 320,'wolfLeftDown');
+		this.hand.kill();
+		this.wolf = game.add.sprite(295, 310,'leftWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
+		this.hand = game.add.sprite(175, 325,'leftDownHand');
+		game.physics.arcade.enable(this.hand);
 	},
 	catchRightDown: function(){
 		this.wolf.kill();
-		this.wolf = game.add.sprite(511, 320,'wolfRightDown');
+		this.hand.kill();
+		this.wolf = game.add.sprite(485, 310,'rightWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
+		this.hand = game.add.sprite(503,325,'rightDownHand');
+		game.physics.arcade.enable(this.hand);
 	},
 	catchLeftUp: function(){
 		this.wolf.kill();
-		this.wolf = game.add.sprite(269,320,'wolfLeftUp');
-		this.wolf.anchor.setTo(0.5,0.5);
+		this.hand.kill();
+		this.wolf = game.add.sprite(295, 310,'leftWolf');
+		this.wolf.anchor.setTo(0.5, 0.5);
+		this.hand = game.add.sprite(160,220,'leftUpHand');
+		game.physics.arcade.enable(this.hand);
 	},
 	catchRightUp: function(){
 		this.wolf.kill();
-		this.wolf = game.add.sprite(511,320,'wolfRightUp');
-		this.wolf.anchor.setTo(0.5,0.5);
+		this.hand.kill();
+		this.wolf = game.add.sprite(485, 310,'rightWolf');
+		this.wolf.anchor.setTo(0.5, 0.5);
+		this.hand = game.add.sprite(518,220,'rightUpHand');	
+		game.physics.arcade.enable(this.hand);	
 	},
 
 	update:function(){
+		game.physics.arcade.overlap(this.hand, this.eggTopLeft, this.addTopLeftScore,null,this);
+		game.physics.arcade.overlap(this.hand, this.eggDownLeft, this.addDownLeftScore,null,this);
+		game.physics.arcade.overlap(this.hand, this.eggTopRight, this.addTopRightScore,null,this);
+		game.physics.arcade.overlap(this.hand, this.eggDownRight, this.addDownRightScore,null,this);
+
+
 
 		if (this.nextEggTime < game.time.now) {
 		
@@ -83,6 +93,7 @@ var playState = {
 
 		if (this.chicken == 1 ){
 			this.eggTopLeft = game.add.sprite(70,147,'egg');
+			game.physics.arcade.enable(this.eggTopLeft);
 			this.topLeftEggDropLoop = game.time.events.loop(500 * challenge, this.updateTopLeftEggPosition,this);
 
 			var chickenIndex = chickenArray.indexOf(1);
@@ -94,6 +105,7 @@ var playState = {
 		};
 		if (this.chicken == 2) {
 			this.eggDownLeft = game.add.sprite(70,257,'egg');
+			game.physics.arcade.enable(this.eggDownLeft);
 			this.downLeftEggDropLoop = game.time.events.loop(500 * challenge, this.updateDownLeftEggPosition,this);
 
 			var chickenIndex = chickenArray.indexOf(2);
@@ -106,6 +118,7 @@ var playState = {
 
 		if (this.chicken == 3) {
 			this.eggTopRight = game.add.sprite(680,147,'egg');
+			game.physics.arcade.enable(this.eggTopRight);
 			this.topRightEggDropLoop = game.time.events.loop(500 * challenge, this.updateTopRightEggPosition,this);
 
 			var chickenIndex = chickenArray.indexOf(3);
@@ -118,6 +131,7 @@ var playState = {
 
 		if (this.chicken == 4) {
 			this.eggDownRight = game.add.sprite(680,257,'egg');
+			game.physics.arcade.enable(this.eggDownRight);
 			this.downRightEggDropLoop = game.time.events.loop(500 * challenge, this.updateDownRightEggPosition,this);
 
 			var chickenIndex = chickenArray.indexOf(4);
@@ -132,9 +146,34 @@ var playState = {
 		this.nextEggTime = game.time.now + delay;
 		};
 
-
-
 	},
+
+	addTopLeftScore:function(){
+		this.eggTopLeft.kill();
+		this.score += 5;
+		this.scoreLabel.text = 'score: ' + this.score;
+	},
+
+	addDownLeftScore:function(){
+		this.eggDownLeft.kill();
+		this.score += 5;
+		this.scoreLabel.text = 'score: ' + this.score;
+	},
+
+	addTopRightScore:function(){
+		this.eggTopRight.kill();
+		this.score += 5;
+		this.scoreLabel.text = 'score: ' + this.score;
+	},
+
+	addDownRightScore:function(){
+		this.eggDownRight.kill();
+		this.score += 5;
+		this.scoreLabel.text = 'score: ' + this.score;
+	},
+
+
+
 
 	createChickens: function(){
 		this.chickens = game.add.group();
@@ -161,15 +200,7 @@ var playState = {
 
 
 
-	updateTopLeftEggPosition:function(){
-		
- 		// this piece is for infinite loop: 
-		// console.log(playState.topLeftEggPosition);
-		// if (this.topLeftEggPosition > this.maxNum) {
-		// 	this.topLeftEggPosition = 0;
-		// };
-
-		
+	updateTopLeftEggPosition:function(){	
 		if (this.topLeftEggPosition >= this.maxNum) {
 			this.eggTopLeft.kill();
 			this.topLeftEggPosition = 0;
@@ -190,14 +221,6 @@ var playState = {
 
 
 	updateDownLeftEggPosition:function(){
-
- 		// this piece is for infinite loop: 
-		// console.log(playState.downLeftEggPosition);
-		// if (this.downLeftEggPosition > this.maxNum) {
-		// 	this.downLeftEggPosition = 0;
-		// };
-
-		// this piece is for one loop when it is called
 		if (this.downLeftEggPosition >= this.maxNum) {
 			this.eggDownLeft.kill();
 			this.downLeftEggPosition = 0;
@@ -214,14 +237,6 @@ var playState = {
 	},
 
 	updateTopRightEggPosition:function(){
-		// this piece is for infinite loop: 
-		// console.log(playState.topRightEggPosition);
-		// if (this.topRightEggPosition > this.maxNum) {
-		// 	this.topRightEggPosition = 0;
-		// };
-		
-
-		// this piece is for one loop when it is called
 		if (this.topRightEggPosition >= this.maxNum) {
 			this.eggTopRight.kill();
 			this.topRightEggPosition = 0;
@@ -239,13 +254,6 @@ var playState = {
 
 
 	updateDownRightEggPosition:function(){
-		// this piece is for infinite loop: 
-		// console.log(playState.downRightEggPosition);
-		// if (this.downRightEggPosition > this.maxNum) {
-		// 	this.downRightEggPosition = 0;
-		// };
-
-		// this piece is for one loop when it is called
 		if (this.downRightEggPosition >= this.maxNum) {
 			this.eggDownRight.kill();
 			this.downRightEggPosition = 0;
