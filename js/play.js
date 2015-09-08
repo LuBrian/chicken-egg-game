@@ -12,8 +12,7 @@ var playState = {
 		//egg.direction
 		//where is hand? if hand is same side as egg and same shelf as egg - caught
 		console.log('Checking collision for %s %s', egg.shelf, egg.direction);
-		debugger
-		console.log('checking hand position: %s %s',this.hand.shelf, this.hand.direction);
+		// console.log('checking hand position: %s %s',this.hand.shelf, this.hand.direction);
 	},
 
 	cleanUpEggs: function(egg)
@@ -46,9 +45,9 @@ var playState = {
 	},
 
 
-	makeWolf: function(shelf, direction)
+	makeWolf: function()
 	{
-		var wolf = new Wolf(game, shelf, direction);
+		var wolf = new Wolf(game);
 		game.add.existing(wolf);
 		// this.eggs.push(egg);
 		// egg.events.onKilled.add(this.cleanUpEggs, this);
@@ -59,6 +58,7 @@ var playState = {
 		this.createShelves();
 		this.createChickens();
 		this.eggs = [];
+
 
 		// this.makeEgg('top', 'left');
 		// this.makeEgg('bottom', 'left');
@@ -77,6 +77,8 @@ var playState = {
 			});
 		}.bind(this), 500);
 
+		this.makeWolf(game);
+
 
 		// this.scoreLabel = game.add.text(30,30,'score: 0',{font: '18px Arial', fill: 'black'});
 		// this.score = 0;
@@ -85,9 +87,9 @@ var playState = {
 		// this.life = 3;
 
 		//initial image when start the game
-		this.wolf = game.add.sprite(295, 310,'leftWolf');
-		this.wolf.anchor.setTo(0.5, 0.5);
-		this.hand = game.add.sprite(175, 325,'leftDownHand');
+		// this.wolf = game.add.sprite(295, 310,'leftWolf');
+		// this.wolf.anchor.setTo(0.5, 0.5);
+		// this.hand = game.add.sprite(175, 325,'leftDownHand');
 
 
 
@@ -101,22 +103,22 @@ var playState = {
 		// this.createShelves();
 		// this.createChickens();
 
-		//calling the move function for each hand
-		var catchLeftDown = game.input.keyboard.addKey(Phaser.Keyboard.C);
-		//when the "C" is pressed, it will call catchLeftDown function
-		catchLeftDown.onDown.add(this.catchLeftDown, this);
+		// calling the move function for each hand
+		// var catchLeftDown = game.input.keyboard.addKey(Phaser.Keyboard.C);
+		// //when the "C" is pressed, it will call catchLeftDown function
+		// catchLeftDown.onDown.add(this.catchLeftDown, this);
 
-		var catchRightDown = game.input.keyboard.addKey(Phaser.Keyboard.N);
-		//when the "N" is pressed, it will call catchRightDown function
-		catchRightDown.onDown.add(this.catchRightDown, this);
+		// var catchRightDown = game.input.keyboard.addKey(Phaser.Keyboard.N);
+		// //when the "N" is pressed, it will call catchRightDown function
+		// catchRightDown.onDown.add(this.catchRightDown, this);
 
-		var catchLeftUp = game.input.keyboard.addKey(Phaser.Keyboard.S);
-		//when the "S" is pressed, it will call catchLeftUp function
-		catchLeftUp.onDown.add(this.catchLeftUp, this);
+		// var catchLeftUp = game.input.keyboard.addKey(Phaser.Keyboard.S);
+		// //when the "S" is pressed, it will call catchLeftUp function
+		// catchLeftUp.onDown.add(this.catchLeftUp, this);
 
-		var catchRightUp = game.input.keyboard.addKey(Phaser.Keyboard.K);
-		//when the "K" is pressed, it will call catchRightUp function
-		catchRightUp.onDown.add(this.catchRightUp, this);
+		// var catchRightUp = game.input.keyboard.addKey(Phaser.Keyboard.K);
+		// //when the "K" is pressed, it will call catchRightUp function
+		// catchRightUp.onDown.add(this.catchRightUp, this);
 
 		// // initialization for each egg
 		// this.topLeftEggPosition = 0;
