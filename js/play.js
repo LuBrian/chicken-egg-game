@@ -12,7 +12,8 @@ var playState = {
 		//egg.direction
 		//where is hand? if hand is same side as egg and same shelf as egg - caught
 		console.log('Checking collision for %s %s', egg.shelf, egg.direction);
-		// console.log('checking hand position: %s %s',catchegg.shelf, catchegg.direction);
+		debugger
+		console.log('checking hand position: %s %s',this.hand.shelf, this.hand.direction);
 	},
 
 	cleanUpEggs: function(egg)
@@ -135,6 +136,7 @@ var playState = {
 		this.wolf.anchor.setTo(0.5, 0.5);
 		this.hand = game.add.sprite(175, 325,'leftDownHand');
 		this.hand.direction = 'left';
+		this.hand.shelf = 'bottom';
 	},
 	catchRightDown: function(){
 		this.wolf.kill();
@@ -142,6 +144,8 @@ var playState = {
 		this.wolf = game.add.sprite(485, 310,'rightWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
 		this.hand = game.add.sprite(503,325,'rightDownHand');
+		this.hand.direction = 'right';
+		this.hand.shelf = 'bottom';
 	},
 	catchLeftUp: function(){
 		this.wolf.kill();
@@ -149,13 +153,17 @@ var playState = {
 		this.wolf = game.add.sprite(295, 310,'leftWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
 		this.hand = game.add.sprite(160,220,'leftUpHand');
+		this.hand.direction = 'left';
+		this.hand.shelf = 'top';
 	},
 	catchRightUp: function(){
 		this.wolf.kill();
 		this.hand.kill();
 		this.wolf = game.add.sprite(485, 310,'rightWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
-		this.hand = game.add.sprite(518,220,'rightUpHand');		
+		this.hand = game.add.sprite(518,220,'rightUpHand');	
+		this.hand.direction = 'right';
+		this.hand.shelf = 'top';	
 	},
 
 	update:function() {
