@@ -6,12 +6,15 @@ var playState = {
 		this.eggs.push(egg);
 		egg.events.onKilled.add(this.cleanUpEggs, this);
 	},
+
 	checkCollision: function(egg)
 	{
 		//egg.direction
 		//where is hand? if hand is same side as egg and same shelf as egg - caught
-		console.log('Checking collision for %s %s', egg.shelf, egg.direction)
+		console.log('Checking collision for %s %s', egg.shelf, egg.direction);
+		// console.log('checking hand position: %s %s',catchegg.shelf, catchegg.direction);
 	},
+
 	cleanUpEggs: function(egg)
 	{
 		if(egg.caught)
@@ -40,6 +43,16 @@ var playState = {
 			return egg != ee;
 		});
 	},
+
+
+	makeWolf: function(shelf, direction)
+	{
+		var wolf = new Wolf(game, shelf, direction);
+		game.add.existing(wolf);
+		// this.eggs.push(egg);
+		// egg.events.onKilled.add(this.cleanUpEggs, this);
+	},
+
 	create: function() {
 		game.add.image(0,0,'background');
 		this.createShelves();
@@ -70,33 +83,39 @@ var playState = {
 		// this.playerLife = game.add.text(700,30,'Life: 3',{font: '18px Arial', fill: 'black'});
 		// this.life = 3;
 
-		// //initial image when start the game
-		// this.wolf = game.add.sprite(295, 310,'leftWolf');
-		// this.wolf.anchor.setTo(0.5, 0.5);
-		// this.hand = game.add.sprite(175, 325,'leftDownHand');
-		// game.physics.arcade.enable(this.hand);
+		//initial image when start the game
+		this.wolf = game.add.sprite(295, 310,'leftWolf');
+		this.wolf.anchor.setTo(0.5, 0.5);
+		this.hand = game.add.sprite(175, 325,'leftDownHand');
+
+
+
+		// this.hand = {
+		// 	shelf:
+		// };
+
 
 		// // this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
 		
 		// this.createShelves();
 		// this.createChickens();
 
-		// //calling the move function for each hand
-		// var catchLeftDown = game.input.keyboard.addKey(Phaser.Keyboard.C);
-		// //when the "C" is pressed, it will call catchLeftDown function
-		// catchLeftDown.onDown.add(this.catchLeftDown, this);
+		//calling the move function for each hand
+		var catchLeftDown = game.input.keyboard.addKey(Phaser.Keyboard.C);
+		//when the "C" is pressed, it will call catchLeftDown function
+		catchLeftDown.onDown.add(this.catchLeftDown, this);
 
-		// var catchRightDown = game.input.keyboard.addKey(Phaser.Keyboard.N);
-		// //when the "N" is pressed, it will call catchRightDown function
-		// catchRightDown.onDown.add(this.catchRightDown, this);
+		var catchRightDown = game.input.keyboard.addKey(Phaser.Keyboard.N);
+		//when the "N" is pressed, it will call catchRightDown function
+		catchRightDown.onDown.add(this.catchRightDown, this);
 
-		// var catchLeftUp = game.input.keyboard.addKey(Phaser.Keyboard.S);
-		// //when the "S" is pressed, it will call catchLeftUp function
-		// catchLeftUp.onDown.add(this.catchLeftUp, this);
+		var catchLeftUp = game.input.keyboard.addKey(Phaser.Keyboard.S);
+		//when the "S" is pressed, it will call catchLeftUp function
+		catchLeftUp.onDown.add(this.catchLeftUp, this);
 
-		// var catchRightUp = game.input.keyboard.addKey(Phaser.Keyboard.K);
-		// //when the "K" is pressed, it will call catchRightUp function
-		// catchRightUp.onDown.add(this.catchRightUp, this);
+		var catchRightUp = game.input.keyboard.addKey(Phaser.Keyboard.K);
+		//when the "K" is pressed, it will call catchRightUp function
+		catchRightUp.onDown.add(this.catchRightUp, this);
 
 		// // initialization for each egg
 		// this.topLeftEggPosition = 0;
@@ -115,7 +134,7 @@ var playState = {
 		this.wolf = game.add.sprite(295, 310,'leftWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
 		this.hand = game.add.sprite(175, 325,'leftDownHand');
-		game.physics.arcade.enable(this.hand);
+		this.hand.direction = 'left';
 	},
 	catchRightDown: function(){
 		this.wolf.kill();
@@ -123,7 +142,6 @@ var playState = {
 		this.wolf = game.add.sprite(485, 310,'rightWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
 		this.hand = game.add.sprite(503,325,'rightDownHand');
-		game.physics.arcade.enable(this.hand);
 	},
 	catchLeftUp: function(){
 		this.wolf.kill();
@@ -131,15 +149,13 @@ var playState = {
 		this.wolf = game.add.sprite(295, 310,'leftWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
 		this.hand = game.add.sprite(160,220,'leftUpHand');
-		game.physics.arcade.enable(this.hand);
 	},
 	catchRightUp: function(){
 		this.wolf.kill();
 		this.hand.kill();
 		this.wolf = game.add.sprite(485, 310,'rightWolf');
 		this.wolf.anchor.setTo(0.5, 0.5);
-		this.hand = game.add.sprite(518,220,'rightUpHand');	
-		game.physics.arcade.enable(this.hand);	
+		this.hand = game.add.sprite(518,220,'rightUpHand');		
 	},
 
 	update:function() {
@@ -230,24 +246,7 @@ var playState = {
 		this.shelves.setAll('body.immovable', true);
 	},
 
-	destroyEgg: function()
-	{
-		// console.log(this);
-		this.brokenEgg.kill();
-		// console.log('kill egg');
-	},
 
-	eggPositions: {
-		top_left: [],
-		bottom_left: [],
-		top_right: [],
-		bottom_right: []
-	},
-
-	updateEggPosition: function()
-	{
-
-	},
 
 	// updateTopLeftEggPosition:function(){	
 	// 	if (this.topLeftEggPosition >= this.maxNum) {

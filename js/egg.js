@@ -39,7 +39,7 @@ Egg.prototype.constructor = Egg;
 
 Egg.prototype.changeState = function()
 {
-	console.log('Changing state inside egg');
+	// console.log('Changing state inside egg');
 	this.state++;
 	if(this.state >= 6)
 	{
