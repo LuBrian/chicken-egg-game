@@ -1,7 +1,7 @@
 var playState = {
 	makeEgg: function(shelf, direction)
 	{
-		var egg = new Egg(game, shelf, direction, this.checkCollision.bind(this));
+		var egg = new Egg(game, shelf, direction, this.checkCollision);
 		game.add.existing(egg);
 		this.eggs.push(egg);
 		egg.events.onKilled.add(this.cleanUpEggs, this);
@@ -36,17 +36,25 @@ var playState = {
 				//Create the cracked egg sprite
 				this.lives -= .5;
 				this.playerLife.text = 'life: ' + this.lives;
-				// console.log(egg.)
+				if (egg.direction == 'left'){
+					// game.add.sprite(
+				}
+
 			}
 			else
 			{
 				this.lives -= 1;
 				this.playerLife.text = 'life: ' + this.lives;
+				console.log(egg);
 			}
 			if(this.lives <= 0)
 			{
 				//Change state to "Game Over"
-				game.state.start('menu')
+				// console.log(this.loop);
+				clearInterval(this.loop);
+				game.state.start('menu');
+
+
 			}
 		}
 		this.eggs = this.eggs.filter(function(ee)
@@ -54,7 +62,6 @@ var playState = {
 			return egg != ee;
 		});
 	},
-
 
 	makeWolf: function()
 	{
@@ -71,6 +78,7 @@ var playState = {
 
 		this.loop = setInterval(function changeState()
 		{
+			console.log('test');
 			this.eggs.forEach(function(egg)
 			{
 				egg.changeState();
@@ -90,42 +98,6 @@ var playState = {
 		chickenArray = [1,2,3,4];
 	},
 
-	catchLeftDown: function(){
-		this.wolf.kill();
-		this.hand.kill();
-		this.wolf = game.add.sprite(295, 310,'leftWolf');
-		this.wolf.anchor.setTo(0.5, 0.5);
-		this.hand = game.add.sprite(175, 325,'leftDownHand');
-		this.hand.direction = 'left';
-		this.hand.shelf = 'bottom';
-	},
-	catchRightDown: function(){
-		this.wolf.kill();
-		this.hand.kill();
-		this.wolf = game.add.sprite(485, 310,'rightWolf');
-		this.wolf.anchor.setTo(0.5, 0.5);
-		this.hand = game.add.sprite(503,325,'rightDownHand');
-		this.hand.direction = 'right';
-		this.hand.shelf = 'bottom';
-	},
-	catchLeftUp: function(){
-		this.wolf.kill();
-		this.hand.kill();
-		this.wolf = game.add.sprite(295, 310,'leftWolf');
-		this.wolf.anchor.setTo(0.5, 0.5);
-		this.hand = game.add.sprite(160,220,'leftUpHand');
-		this.hand.direction = 'left';
-		this.hand.shelf = 'top';
-	},
-	catchRightUp: function(){
-		this.wolf.kill();
-		this.hand.kill();
-		this.wolf = game.add.sprite(485, 310,'rightWolf');
-		this.wolf.anchor.setTo(0.5, 0.5);
-		this.hand = game.add.sprite(518,220,'rightUpHand');	
-		this.hand.direction = 'right';
-		this.hand.shelf = 'top';	
-	},
 
 	update:function() {
 		if (this.nextEggTime < game.time.now) {
@@ -156,30 +128,6 @@ var playState = {
 		this.nextEggTime = game.time.now + delay;
 		};
 
-	},
-
-	addTopLeftScore:function(){
-		this.eggTopLeft.kill();
-		this.score += 5;
-		this.scoreLabel.text = 'score: ' + this.score;
-	},
-
-	addDownLeftScore:function(){
-		this.eggDownLeft.kill();
-		this.score += 5;
-		this.scoreLabel.text = 'score: ' + this.score;
-	},
-
-	addTopRightScore:function(){
-		this.eggTopRight.kill();
-		this.score += 5;
-		this.scoreLabel.text = 'score: ' + this.score;
-	},
-
-	addDownRightScore:function(){
-		this.eggDownRight.kill();
-		this.score += 5;
-		this.scoreLabel.text = 'score: ' + this.score;
 	},
 
 
