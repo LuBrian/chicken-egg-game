@@ -25,8 +25,8 @@ var playState = {
 	{
 		if(egg.caught)
 		{
-			this.score++;
-			this.scoreLabel.text = 'score: ' + this.score;
+			game.global.score++;
+			this.scoreLabel.text = 'score: ' + game.global.score;
 		}
 		else
 		{
@@ -107,42 +107,26 @@ var playState = {
 
 
 		this.scoreLabel = game.add.text(30,30,'score: 0',{font: '18px Arial', fill: 'black'});
-		this.score = 0;
+		game.global.score = 0;
 		
 		this.playerLife = game.add.text(700,30,'Life: 3',{font: '18px Arial', fill: 'black'});
 		this.lives = 3;
 
 		this.nextEggTime = 0;
-		chickenArray = [1,2,3,4];
 	},
+
 
 
 	update:function() {
 		if (this.nextEggTime < game.time.now) {
-		
-		this.challenge = 3;
+		// when score is 50, reach max speed
+		this.challenge = Math.max(2 - 0.03*game.global.score, 0.3);
+		// this.challenge = ;
 		var delay = 1000 * this.challenge;
 
 		// Create a new egg, and update the 'nextEgg' time
-		this.chicken = chickenArray[game.rnd.integerInRange(0, chickenArray.length-1)];
-
-		if (this.chicken == 1 ){
-			this.makeEgg('top', 'left');
-		};
-
-		if (this.chicken == 2) {
-			this.makeEgg('bottom', 'left');
-		};
-
-		if (this.chicken == 3) {
-			this.makeEgg('top','right');
-		};
-
-		if (this.chicken == 4) {
-			this.makeEgg('bottom','right');
-		};
-
-
+		this.chicken = game.rnd.integerInRange(1, 4);
+		this.makeEgg((this.chicken == 1 || this.chicken == 3) ? 'top' : 'bottom', this.chicken <= 2 ? 'left' : 'right');
 		this.nextEggTime = game.time.now + delay;
 		};
 
@@ -153,25 +137,20 @@ var playState = {
 
 	createChickens: function(){
 		this.chickens = game.add.group();
-		this.chickens.enableBody = true;
 		game.add.sprite(3,106,'LeftChicken',0,this.chickens); //this.chickenLeftTop
 		game.add.sprite(3,216,'LeftChicken',0,this.chickens); //this.chickenLeftBot
 		game.add.sprite(710,106,'RightChicken',0,this.chickens); //this.chickenRightTop
 		game.add.sprite(710,216,'RightChicken',0,this.chickens); //this.chickenRightTop
-		this.chickens.setAll('body.immovable',true);
 	},
 
 
 
 	createShelves:function(){
 		this.shelves = game.add.group();
-		this.shelves.enableBody = true;
-
 		game.add.sprite(0,140,'leftShelf',0,this.shelves); //left top
 		game.add.sprite(0,250,'leftShelf',0,this.shelves); //left bot
 		game.add.sprite(610,140,'rightShelf',0,this.shelves); //right top
 		game.add.sprite(610,250,'rightShelf',0,this.shelves); //right bot
-		this.shelves.setAll('body.immovable', true);
 	},
 
 }

@@ -17,25 +17,25 @@ var menuState = {
 	var upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 	// When the 'upKey' is pressed, it will call the 'start' function once
 	upKey.onDown.addOnce(this.start, this);
- // // show the score and best score
-	// var text = 'score: ' + game.global.score + '\nbest score: ' +
-	// localStorage.getItem('bestScore');
-	// var scoreLabel = game.add.text(game.world.centerX, game.world.centerY, text,
-	// { font: '25px Arial', fill: '#ffffff', align: 'center' });
-	// scoreLabel.anchor.setTo(0.5, 0.5);
+ // show the score and best score
+	var text = 'score: ' + game.global.score + '\nbest score: ' +
+	localStorage.getItem('bestScore');
+	var scoreLabel = game.add.text(game.world.centerX, game.world.centerY, text,
+	{ font: '25px Arial', fill: '#ffffff', align: 'center' });
+	scoreLabel.anchor.setTo(0.5, 0.5);
 
 
-	// // If 'bestScore' is not defined
-	// // It means that this is the first time the game is played
-	// if (!localStorage.getItem('bestScore')) {
-	// // Then set the best score to 0
-	// localStorage.setItem('bestScore', 0);
-	// }
-	// // If the score is higher than the best score
-	// if (game.global.score > localStorage.getItem('bestScore')) {
-	// 	// Then update the best score
-	// 	localStorage.setItem('bestScore', game.global.score);
-	// 	}
+	// If 'bestScore' is not defined
+	// It means that this is the first time the game is played
+	if (!localStorage.getItem('bestScore')) {
+	// Then set the best score to 0
+	localStorage.setItem('bestScore', 0);
+	}
+	// If the score is higher than the best score
+	if (game.global.score > localStorage.getItem('bestScore')) {
+		// Then update the best score
+		localStorage.setItem('bestScore', game.global.score);
+		}
 
 	// 	// Add the mute button that calls the 'toggleSound' function when pressed
 	// this.muteButton = game.add.button(20, 20, 'mute', this.toggleSound, this);
@@ -51,7 +51,7 @@ var menuState = {
 	},
 	start: function() {
 	// Start the actual game
-	game.state.start('play');
+		game.state.start('play');
 	},
 
 	// Function called when the 'muteButton' is pressed
