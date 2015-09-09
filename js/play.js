@@ -37,7 +37,15 @@ var playState = {
 				this.lives -= .5;
 				this.playerLife.text = 'life: ' + this.lives;
 				if (egg.direction == 'left'){
-					// game.add.sprite(
+					this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
+					setTimeout(function(){
+						this.brokenEgg.kill();
+					}.bind(this),500)
+				} else {
+					this.brokenEgg = game.add.sprite(575,400,'brokenEgg');
+					setTimeout(function(){
+						this.brokenEgg.kill();
+					}.bind(this),500)
 				}
 
 			}
@@ -45,7 +53,17 @@ var playState = {
 			{
 				this.lives -= 1;
 				this.playerLife.text = 'life: ' + this.lives;
-				console.log(egg);
+				if (egg.direction == 'left'){
+					this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
+					setTimeout(function(){
+						this.brokenEgg.kill();
+					}.bind(this),500)
+				} else {
+					this.brokenEgg = game.add.sprite(575,400,'brokenEgg');
+					setTimeout(function(){
+						this.brokenEgg.kill();
+					}.bind(this),500)
+				}
 			}
 			if(this.lives <= 0)
 			{
@@ -102,7 +120,7 @@ var playState = {
 	update:function() {
 		if (this.nextEggTime < game.time.now) {
 		
-		this.challenge = 1;
+		this.challenge = 3;
 		var delay = 1000 * this.challenge;
 
 		// Create a new egg, and update the 'nextEgg' time
