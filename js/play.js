@@ -12,7 +12,7 @@ var playState = {
 		//egg.direction
 		//where is hand? if hand is same side as egg and same shelf as egg - caught
 		console.log('Checking collision for %s %s', egg.shelf, egg.direction);
-		// console.log('checking hand position: %s %s',this.hand.shelf, this.hand.direction);
+		console.log('checking hand position: %s %s',wolf.shelf, wolf.direction);
 	},
 
 	cleanUpEggs: function(egg)
@@ -47,10 +47,7 @@ var playState = {
 
 	makeWolf: function()
 	{
-		var wolf = new Wolf(game);
-		game.add.existing(wolf);
-		// this.eggs.push(egg);
-		// egg.events.onKilled.add(this.cleanUpEggs, this);
+		var wolf = new Wolf(game,this);
 	},
 
 	create: function() {
@@ -77,7 +74,7 @@ var playState = {
 			});
 		}.bind(this), 500);
 
-		this.makeWolf(game);
+		this.makeWolf();
 
 
 		// this.scoreLabel = game.add.text(30,30,'score: 0',{font: '18px Arial', fill: 'black'});
@@ -86,10 +83,6 @@ var playState = {
 		// this.playerLife = game.add.text(700,30,'Life: 3',{font: '18px Arial', fill: 'black'});
 		// this.life = 3;
 
-		//initial image when start the game
-		// this.wolf = game.add.sprite(295, 310,'leftWolf');
-		// this.wolf.anchor.setTo(0.5, 0.5);
-		// this.hand = game.add.sprite(175, 325,'leftDownHand');
 
 
 
