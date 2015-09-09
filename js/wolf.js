@@ -5,6 +5,8 @@ var Wolf = function Wolf(game)
 	this.wolf = game.add.sprite(295, 310,'leftWolf');
 	this.wolf.anchor.setTo(0.5, 0.5);
 	this.hand = game.add.sprite(175, 325,'leftDownHand');
+	this.direction = 'left';
+	this.shelf = 'bottom';
 	this.game = game;
 	game.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.changeState('left','down'), this);
 	game.input.keyboard.addKey(Phaser.Keyboard.N).onDown.add(this.changeState('right','down'), this);
@@ -25,15 +27,18 @@ Wolf.prototype.changeState = function(direction, shelf)
 			this.hand.kill();
 			this.wolf = game.add.sprite(295, 310,'leftWolf');
 			this.wolf.anchor.setTo(0.5, 0.5);
+			this.direction = 'left'
 			if(shelf == 'up')
 			{
 				//draw top-left hand
 				this.hand = game.add.sprite(160,220,'leftUpHand');
+				this.shelf = 'top';
 			}
 			else
 			{
 				//Draw bottom-left hand
 				this.hand = game.add.sprite(175, 325,'leftDownHand');
+				this.shelf = 'bottom';
 
 			}
 		}
@@ -44,15 +49,18 @@ Wolf.prototype.changeState = function(direction, shelf)
 			this.hand.kill();
 			this.wolf = game.add.sprite(485, 310,'rightWolf');
 			this.wolf.anchor.setTo(0.5, 0.5);
+			this.direction = 'right';
 			if(shelf == 'up')
 			{
 				//draw top-right hand
-				this.hand = game.add.sprite(518,220,'rightUpHand');	
+				this.hand = game.add.sprite(518,220,'rightUpHand');
+				this.shelf = 'top';
 			}
 			else
 			{
 				//Draw bottom-right hand
 				this.hand = game.add.sprite(503,325,'rightDownHand');
+				this.shelf = 'bottom';
 			}	
 		}
 	}
