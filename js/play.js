@@ -9,15 +9,9 @@ var playState = {
 
 	checkCollision: function(egg)
 	{
-		//egg.direction
-		//where is hand? if hand is same side as egg and same shelf as egg - caught
-		// console.log('Checking collision for %s %s', egg.shelf, egg.direction);
-		// console.log(wolf.shelf + wolf.direction);
+		// check if the egg and the shelf has the same direction and shelf
 		if (wolf.shelf == egg.shelf && wolf.direction == egg.direction){
-			console.log('caught')
 			egg.caught = true;
-		} else {
-			console.log('miss')
 		}
 	},
 
@@ -35,42 +29,41 @@ var playState = {
 			{
 				//Create the cracked egg sprite
 				this.lives -= .5;
-				this.playerLife.text = 'life: ' + this.lives;
+				this.playerLife.text = 'life: ' + Math.round(this.lives);
 				if (egg.direction == 'left'){
 					this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
 					setTimeout(function(){
 						this.brokenEgg.kill();
-					}.bind(this),500)
+					}.bind(this),1000)
 				} else {
 					this.brokenEgg = game.add.sprite(575,400,'brokenEgg');
 					setTimeout(function(){
 						this.brokenEgg.kill();
-					}.bind(this),500)
+					}.bind(this),1000)
 				}
 
 			}
 			else
 			{
 				this.lives -= 1;
-				this.playerLife.text = 'life: ' + this.lives;
+				this.playerLife.text = 'life: ' + Math.round(this.lives);
 				if (egg.direction == 'left'){
 					this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
 					setTimeout(function(){
 						this.brokenEgg.kill();
-					}.bind(this),500)
+					}.bind(this),1000)
 				} else {
 					this.brokenEgg = game.add.sprite(575,400,'brokenEgg');
 					setTimeout(function(){
 						this.brokenEgg.kill();
-					}.bind(this),500)
+					}.bind(this),1000)
 				}
 			}
 			if(this.lives <= 0)
 			{
 				//Change state to "Game Over"
-				// console.log(this.loop);
 				clearInterval(this.loop);
-				game.state.start('menu');
+				game.state.start('gameOver');
 
 
 			}
@@ -93,17 +86,61 @@ var playState = {
 		this.eggs = [];
 
 
-
+		isPaused = false;
 		this.loop = setInterval(function changeState()
-		{
-			console.log('test');
-			this.eggs.forEach(function(egg)
-			{
-				egg.changeState();
-			});
+		{ 
+			if(!isPaused) {
+				this.eggs.forEach(function(egg)
+				{
+					egg.changeState();
+				});
+			}
 		}.bind(this), 500);
 
 		this.makeWolf();
+
+
+
+
+
+
+
+		pause_label = game.add.text(680, 20, 'Pause', { font: '24px Arial', fill: '#fff' });
+    pause_label.inputEnabled = true;
+    pause_label.events.onInputUp.add(function () {
+        // When the paus button is pressed, we pause the game
+        game.paused = true;
+        // clearInterval(this.loop);
+        isPaused = true;
+
+        // Then add the menu
+        this.pauseMenu = game.add.text(game.world.centerX,game.world.centerY,'Press space to continue, press q to quit',{ font: '24px Arial', fill: 'red' });
+				this.pauseMenu.anchor.setTo(0.5,0.5);
+
+    }.bind(this));
+    // if (isPaused){
+	    var resumeKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	    resumeKey.onDown.add(this.unpause,this);
+
+	    var quitKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+	    quitKey.onDown.add(this.quit,this);
+  	
+
+    // And finally the method that handels the pause menu
+    // function unpause() {
+    // 	resumeButton.destroy();
+    // 	restartButton.destroy();
+    //   game.paused = false;
+    //   this.loop;
+    // };
+
+    // function restart(){
+
+    // };
+
+
+
+
 
 
 		this.scoreLabel = game.add.text(30,30,'score: 0',{font: '18px Arial', fill: 'black'});
@@ -115,14 +152,27 @@ var playState = {
 		this.nextEggTime = 0;
 	},
 
+	unpause: function(){
+		this.pauseMenu.destroy();
+  	isPaused = false;
+    game.paused = false;
+	},
 
+	quit: function(){
+		this.pauseMenu.destroy();
+		isPaused = false;
+    game.paused = false;
+		clearInterval(this.loop);
+		game.state.start('menu');
+
+	},
 
 	update:function() {
 		if (this.nextEggTime < game.time.now) {
-		// when score is 50, reach max speed
-		this.challenge = Math.max(2 - 0.03*game.global.score, 0.3);
+		// when score is 57, reach max speed
+		challenge = Math.max(1.5 - 0.024 * game.global.score, 0.3);
 		// this.challenge = ;
-		var delay = 1000 * this.challenge;
+		var delay = 1000 * challenge;
 
 		// Create a new egg, and update the 'nextEgg' time
 		this.chicken = game.rnd.integerInRange(1, 4);

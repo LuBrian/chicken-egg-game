@@ -65,4 +65,3 @@ Wolf.prototype.changeState = function(direction, shelf)
 		}
 	}
 }
-// Add Comment

@@ -1,10 +1,7 @@
 var loadState = {
 	preload:function() {
 		game.load.image('leftWolf','assets/left_wolf.png');
-		game.load.image('rightWolf','assets/right_wolf.png');
-		// game.load.image('wolfLeftUp','assets/wolf1.png');
-		// game.load.image('wolfRightUp','assets/wolf2.png');
-		
+		game.load.image('rightWolf','assets/right_wolf.png');		
 		game.load.image('background', 'assets/game-background.jpg');
 		game.load.image('LeftChicken', 'assets/chicken1.png');
 		game.load.image('RightChicken', 'assets/chicken2.png');
@@ -16,18 +13,11 @@ var loadState = {
 		game.load.image('leftUpHand','assets/left_up_hand.png');
 		game.load.image('rightUpHand','assets/right_up_hand.png');
 		game.load.image('brokenEgg','assets/broken-egg.png');
-
-
-
-
-
-
+		game.load.image('button','assets/button1.png');
+		game.load.image('button1','assets/button.png');
+		game.load.image('pause','assets/pause2.png');
 	},
 	create:function() {
 		game.state.start('menu');
-
-
 	}
-
-
 }

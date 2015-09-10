@@ -3,29 +3,30 @@ var Egg = function Egg(game, shelf, direction, checkCollisions)
 	var positions = {
 		top: {
 			left: {
-				x: 70,
-				y: 147
+				x: 90,
+				y: 164
 			},
 			right: {
-				x: 680,
-				y: 147
+				x: 690,
+				y: 164
 			}
 		},
 		bottom:
 		{
 			left: {
-				x: 70,
-				y: 257
+				x: 90,
+				y: 274
 			},
 			right: {
-				x: 680,
-				y: 257				
+				x: 690,
+				y: 274				
 			}
 		}
 	};
 
 	var pos = positions[shelf][direction];
 	Phaser.Sprite.call(this, game, pos.x, pos.y, "egg", 0);
+	this.anchor.setTo(0.5,0.5);
 	this.game = game;
 	this.state = 0;
 	this.shelf = shelf;
@@ -39,7 +40,6 @@ Egg.prototype.constructor = Egg;
 
 Egg.prototype.changeState = function()
 {
-	// console.log('Changing state inside egg');
 	this.state++;
 	if(this.state >= 6)
 	{
@@ -52,20 +52,14 @@ Egg.prototype.changeState = function()
 	if (this.direction == 'left')
 	{
 			this.x += 20;
-			this.y += 10;
-
+			this.y += 11;
+			this.angle += 30;
 		} 
 	if (this.direction == 'right')
 	{
 			this.x -= 20;
-			this.y += 10;
+			this.y += 11;
+			this.angle -= 30;
 	}
 }
-
-// Egg.prototype = {
-// 	nextState: function()
-// 	{
-// 		
-// 	}
-// };
 
