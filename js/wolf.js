@@ -16,10 +16,17 @@ var Wolf = function Wolf(game)
 
 Wolf.prototype = Object.create(Phaser.Sprite.prototype);
 Wolf.prototype.constructor = Wolf;
+
+Wolf.prototype.pause = function(paused)
+{
+	this.paused = paused;
+}
+
 Wolf.prototype.changeState = function(direction, shelf)
 {
 	return function(e)
 	{
+		if(this.paused) { return; }
 		if(direction == 'left')
 		{
 			//Draw Left wolf

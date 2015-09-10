@@ -14,8 +14,7 @@ var loadState = {
 		game.load.image('rightUpHand','assets/right_up_hand.png');
 		game.load.image('brokenEgg','assets/broken-egg.png');
 		game.load.image('button','assets/button1.png');
-		game.load.image('button1','assets/button.png');
-		game.load.image('pause','assets/pause2.png');
+		game.load.image('pause2','assets/pausebutton2.png');
 	},
 	create:function() {
 		game.state.start('menu');

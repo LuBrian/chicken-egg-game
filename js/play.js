@@ -1,7 +1,7 @@
 var playState = {
 	makeEgg: function(shelf, direction)
 	{
-		var egg = new Egg(game, shelf, direction, this.checkCollision);
+		var egg = new Egg(game, shelf, direction, this.checkCollision.bind(this));
 		game.add.existing(egg);
 		this.eggs.push(egg);
 		egg.events.onKilled.add(this.cleanUpEggs, this);
@@ -10,7 +10,8 @@ var playState = {
 	checkCollision: function(egg)
 	{
 		// check if the egg and the shelf has the same direction and shelf
-		if (wolf.shelf == egg.shelf && wolf.direction == egg.direction){
+		if (this.wolf.shelf == egg.shelf && this.wolf.direction == egg.direction)
+		{
 			egg.caught = true;
 		}
 	},
@@ -62,7 +63,7 @@ var playState = {
 			if(this.lives <= 0)
 			{
 				//Change state to "Game Over"
-				clearInterval(this.loop);
+				// clearInterval(this.loop);
 				game.state.start('gameOver');
 
 
@@ -76,7 +77,7 @@ var playState = {
 
 	makeWolf: function()
 	{
-		wolf = new Wolf(game);
+		this.wolf = new Wolf(game);
 	},
 
 	create: function() {
@@ -85,99 +86,96 @@ var playState = {
 		this.createChickens();
 		this.eggs = [];
 
-
-		isPaused = false;
-		this.loop = setInterval(function changeState()
-		{ 
-			if(!isPaused) {
-				this.eggs.forEach(function(egg)
-				{
-					egg.changeState();
-				});
-			}
-		}.bind(this), 500);
-
 		this.makeWolf();
 
+		// show pause button
+		pause_label = game.add.button(700, 10, 'pause2',this.pause, this);
 
-
-
-
-
-
-		pause_label = game.add.text(680, 20, 'Pause', { font: '24px Arial', fill: '#fff' });
-    pause_label.inputEnabled = true;
-    pause_label.events.onInputUp.add(function () {
-        // When the paus button is pressed, we pause the game
-        game.paused = true;
-        // clearInterval(this.loop);
-        isPaused = true;
-
-        // Then add the menu
-        this.pauseMenu = game.add.text(game.world.centerX,game.world.centerY,'Press space to continue, press q to quit',{ font: '24px Arial', fill: 'red' });
-				this.pauseMenu.anchor.setTo(0.5,0.5);
-
-    }.bind(this));
-    // if (isPaused){
-	    var resumeKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-	    resumeKey.onDown.add(this.unpause,this);
-
-	    var quitKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
-	    quitKey.onDown.add(this.quit,this);
-  	
-
-    // And finally the method that handels the pause menu
-    // function unpause() {
-    // 	resumeButton.destroy();
-    // 	restartButton.destroy();
-    //   game.paused = false;
-    //   this.loop;
-    // };
-
-    // function restart(){
-
-    // };
-
-
-
-
-
-
-		this.scoreLabel = game.add.text(30,30,'score: 0',{font: '18px Arial', fill: 'black'});
+		this.scoreLabel = game.add.text(game.world.centerX,50,'score: 0',{font: '18px Arial', fill: 'black'});
+		this.scoreLabel.anchor.setTo(0.5,0.5);
 		game.global.score = 0;
 		
-		this.playerLife = game.add.text(700,30,'Life: 3',{font: '18px Arial', fill: 'black'});
+		this.playerLife = game.add.text(game.world.centerX,30,'Life: 3',{font: '18px Arial', fill: 'black'});
+		this.playerLife.anchor.setTo(0.5,0.5);
 		this.lives = 3;
 
 		this.nextEggTime = 0;
 	},
 
-	unpause: function(){
-		this.pauseMenu.destroy();
-  	isPaused = false;
-    game.paused = false;
+	pause: function()
+	{
+		// Pause the entire game
+		this.paused = !this.paused;
+		this.wolf.pause(this.paused);
+
+    // Then show the quit and resume instructions
+	  // this.pauseMenu = game.add.text(game.world.centerX,150,"Press SPACEBAR to continue \nPress Q to quit",{ font: '24px Arial', fill: 'red' });
+		// this.pauseMenu.anchor.setTo(0.5,0.5);
+
+		// Add resume key
+		// var resumeKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+		// resumeKey.onDown.add(this.unpause,this);
+
+	  // Add quit key
+	  // var quitKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+	  // quitKey.onDown.add(this.quit,this);
+
 	},
 
-	quit: function(){
-		this.pauseMenu.destroy();
-		isPaused = false;
-    game.paused = false;
-		clearInterval(this.loop);
+	unpause: function() {
+		// Unpause the entire game
+		// this.pauseMenu.destroy();
+    this.paused = false;
+	},
+
+	quit: function() {
+		// Quit the game, clean up the window and change to beginning state
+		// this.pauseMenu.destroy();
+    this.paused = false;
+		// clearInterval(this.loop);
 		game.state.start('menu');
 
 	},
 
-	update:function() {
-		if (this.nextEggTime < game.time.now) {
-		// when score is 57, reach max speed
-		challenge = Math.max(1.5 - 0.024 * game.global.score, 0.3);
-		// this.challenge = ;
-		var delay = 1000 * challenge;
+	getDelay: function()
+	{
+		var baseSpeed = Math.max(2 - 0.024 * game.global.score, 0.3);
+		if(this.speedRoundTicks > 0)
+		{
+			baseSpeed * 1.02;
+		}
+		return 1000 * baseSpeed;
+	},
 
-		// Create a new egg, and update the 'nextEgg' time
-		this.chicken = game.rnd.integerInRange(1, 4);
-		this.makeEgg((this.chicken == 1 || this.chicken == 3) ? 'top' : 'bottom', this.chicken <= 2 ? 'left' : 'right');
-		this.nextEggTime = game.time.now + delay;
+	update:function()
+	{
+		if(this.paused) { return; }
+
+		if (this.nextEggTime < game.time.now)
+		{
+			if(game.rnd.integerInRange(1, 100) === 1)
+			{
+				console.log('Start Speed Round')
+				this.speedRoundTicks = game.rnd.integerInRange(10,15);
+			}
+
+			var chicken = game.rnd.integerInRange(1, 4);
+			this.makeEgg((chicken == 1 || chicken == 3) ? 'top' : 'bottom', chicken <= 2 ? 'left' : 'right');
+			this.nextEggTime = game.time.now + this.getDelay();
+
+			this.eggs.forEach(function(egg)
+			{
+				egg.changeState();
+			});
+
+			if(this.speedRoundTicks > 0)
+			{
+				this.speedRoundTicks--;
+			}
+			if(this.speedRoundTicks == 0)
+			{
+				console.log('Stop Speed Round');
+			}
 		};
 
 	},
