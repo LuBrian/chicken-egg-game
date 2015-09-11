@@ -26,21 +26,30 @@ var playState = {
 		else
 		{
 			//Roll for cracked eggs
-			if(game.rnd.integerInRange(1,6) === 6)
+			if(game.rnd.integerInRange(1,6) === 1)
 			{
 				//Create the cracked egg sprite
 				this.lives -= .5;
 				this.playerLife.text = 'life: ' + Math.round(this.lives);
 				if (egg.direction == 'left'){
-					this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
+					this.happychicken = game.add.sprite(175,400,'happychicken2');
 					setTimeout(function(){
-						this.brokenEgg.kill();
-					}.bind(this),1000)
+						this.happychicken.kill();
+						this.happychicken = game.add.sprite(75,400,'happychicken4');
+						setTimeout(function(){
+							this.happychicken.kill();
+						}.bind(this),500)
+					}.bind(this),500)
+
 				} else {
-					this.brokenEgg = game.add.sprite(575,400,'brokenEgg');
+					this.happychicken = game.add.sprite(575,400,'happychicken1');
 					setTimeout(function(){
-						this.brokenEgg.kill();
-					}.bind(this),1000)
+						this.happychicken.kill();
+						this.happychicken = game.add.sprite(700,400,'happychicken3');
+						setTimeout(function(){
+							this.happychicken.kill();
+						}.bind(this),500)
+					}.bind(this),500)
 				}
 
 			}
@@ -88,8 +97,17 @@ var playState = {
 
 		this.makeWolf();
 
+		this.loop = setInterval(function changeState(){
+			if (!this.paused) {
+				this.eggs.forEach(function(egg)
+				{
+					egg.changeState();
+				});
+			}
+		}.bind(this),500)
+
 		// show pause button
-		pause_label = game.add.button(700, 10, 'pause2',this.pause, this);
+		pause_label = game.add.button(720, 10, 'pausebutton',this.pause, this);
 
 		this.scoreLabel = game.add.text(game.world.centerX,50,'score: 0',{font: '18px Arial', fill: 'black'});
 		this.scoreLabel.anchor.setTo(0.5,0.5);
@@ -100,41 +118,23 @@ var playState = {
 		this.lives = 3;
 
 		this.nextEggTime = 0;
+		this.speedRoundTicks = 0;
 	},
 
 	pause: function()
 	{
-		// Pause the entire game
-		this.paused = !this.paused;
+		// pause the entire game
+		pause_label.kill();
+		this.paused = true;
 		this.wolf.pause(this.paused);
-
-    // Then show the quit and resume instructions
-	  // this.pauseMenu = game.add.text(game.world.centerX,150,"Press SPACEBAR to continue \nPress Q to quit",{ font: '24px Arial', fill: 'red' });
-		// this.pauseMenu.anchor.setTo(0.5,0.5);
-
-		// Add resume key
-		// var resumeKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-		// resumeKey.onDown.add(this.unpause,this);
-
-	  // Add quit key
-	  // var quitKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
-	  // quitKey.onDown.add(this.quit,this);
-
+		play_label = game.add.button(720, 10, 'playbutton',this.unpause, this);
 	},
 
 	unpause: function() {
 		// Unpause the entire game
-		// this.pauseMenu.destroy();
     this.paused = false;
-	},
-
-	quit: function() {
-		// Quit the game, clean up the window and change to beginning state
-		// this.pauseMenu.destroy();
-    this.paused = false;
-		// clearInterval(this.loop);
-		game.state.start('menu');
-
+    play_label.kill();
+    pause_label = game.add.button(720, 10, 'pausebutton',this.pause, this);
 	},
 
 	getDelay: function()
@@ -142,31 +142,41 @@ var playState = {
 		var baseSpeed = Math.max(2 - 0.024 * game.global.score, 0.3);
 		if(this.speedRoundTicks > 0)
 		{
-			baseSpeed * 1.02;
+			return 1000 * baseSpeed * 0.5;
+		} else {
+			return 1000 * baseSpeed;
 		}
-		return 1000 * baseSpeed;
 	},
 
 	update:function()
 	{
 		if(this.paused) { return; }
+		
+		if (this.speedChicken) {
+			this.speedChicken.angle += 2;
+		}
 
 		if (this.nextEggTime < game.time.now)
 		{
-			if(game.rnd.integerInRange(1, 100) === 1)
+			if (game.global.score == 60 || game.global.score == 100 || game.global.score == 120){
+				this.lives += 1;
+				this.playerLife.text = 'life: ' + Math.round(this.lives);
+			}
+			
+			if(this.speedRoundTicks == 0 && game.global.score >= 10)
 			{
-				console.log('Start Speed Round')
-				this.speedRoundTicks = game.rnd.integerInRange(10,15);
+				if(game.rnd.integerInRange(1, 25) === 6)
+				{
+					this.speedChicken = game.add.sprite(50,50,'speedchicken');
+					this.speedChicken.anchor.setTo(0.5,0.5);
+					this.speedRoundTicks = game.rnd.integerInRange(10,15);
+
+				}
 			}
 
 			var chicken = game.rnd.integerInRange(1, 4);
 			this.makeEgg((chicken == 1 || chicken == 3) ? 'top' : 'bottom', chicken <= 2 ? 'left' : 'right');
 			this.nextEggTime = game.time.now + this.getDelay();
-
-			this.eggs.forEach(function(egg)
-			{
-				egg.changeState();
-			});
 
 			if(this.speedRoundTicks > 0)
 			{
@@ -174,7 +184,10 @@ var playState = {
 			}
 			if(this.speedRoundTicks == 0)
 			{
-				console.log('Stop Speed Round');
+				if(this.speedChicken)
+				{
+					this.speedChicken.kill();
+				}
 			}
 		};
 

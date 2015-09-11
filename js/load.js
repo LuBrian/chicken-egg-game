@@ -12,9 +12,15 @@ var loadState = {
 		game.load.image('rightDownHand','assets/right_down_hand.png');
 		game.load.image('leftUpHand','assets/left_up_hand.png');
 		game.load.image('rightUpHand','assets/right_up_hand.png');
-		game.load.image('brokenEgg','assets/broken-egg.png');
+		game.load.image('brokenEgg','assets/brokenEgg1.png');
 		game.load.image('button','assets/button1.png');
-		game.load.image('pause2','assets/pausebutton2.png');
+		game.load.image('pausebutton','assets/pause1.png');
+		game.load.image('playbutton','assets/play1.png');
+		game.load.image('speedchicken','assets/speedchicken.png');
+		game.load.image('happychicken1','assets/happyChicken1.png');
+		game.load.image('happychicken2','assets/happyChicken2.png');
+		game.load.image('happychicken3','assets/happyChicken3.png');
+		game.load.image('happychicken4','assets/happyChicken4.png');
 	},
 	create:function() {
 		game.state.start('menu');
