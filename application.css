@@ -1,7 +1,13 @@
+@font-face {
+	font-family: 'myLcsFont';
+	src: url('assets/LLPIXEL3.ttf') format('truetype');
+}
+
+
 #gameDiv {
+	font-family:'myLcsFont';
 	margin: auto;
 	margin-top: 50px;
   width: 60%;
-  padding: 10px;
-  border:3px solid #8AC007;
+
 }

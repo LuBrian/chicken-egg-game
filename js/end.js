@@ -1,8 +1,11 @@
 var endState = {
 	create: function(){
 		game.add.image(0, 0, 'background');
+		this.gameoverSound = game.add.audio('gameoverSound');
+		this.gameoverSound.play();
+
 		var nameLabel = game.add.text(game.world.centerX, 120, 'Game Over',
-			{ font: '80px Arial', fill: 'black' });
+			{ font: '80px myLcsFont', fill: 'black' });
 		nameLabel.anchor.setTo(0.5, 0.5);
 
 		if (!localStorage.getItem('bestScore')) {
@@ -18,15 +21,14 @@ var endState = {
 		var text = 'score: ' + game.global.score + '\nbest score: ' +
 		localStorage.getItem('bestScore');
 		var scoreLabel = game.add.text(game.world.centerX, game.world.centerY, text,
-		{ font: '25px Arial', fill: 'black', align: 'center' });
+		{ font: '25px myLcsFont', fill: 'black', align: 'center' });
 		scoreLabel.anchor.setTo(0.5, 0.5);
 
  	
 		var button = game.add.button(game.world.centerX,320,'button',this.showMenu,this);
 		button.anchor.setTo(0.5,0.5);
-		console.log(button);
-
 	},
+
 	showMenu: function(){
 		this.game.state.start('menu');
 	}

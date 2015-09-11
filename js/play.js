@@ -13,6 +13,7 @@ var playState = {
 		if (this.wolf.shelf == egg.shelf && this.wolf.direction == egg.direction)
 		{
 			egg.caught = true;
+			this.catchSound.play();
 		}
 	},
 
@@ -21,7 +22,7 @@ var playState = {
 		if(egg.caught)
 		{
 			game.global.score++;
-			this.scoreLabel.text = 'score: ' + game.global.score;
+			this.scoreLabel.text = 'Score: ' + game.global.score;
 		}
 		else
 		{
@@ -33,9 +34,11 @@ var playState = {
 				this.playerLife.text = 'life: ' + Math.round(this.lives);
 				if (egg.direction == 'left'){
 					this.happychicken = game.add.sprite(175,400,'happychicken2');
+					this.happySound.play();
 					setTimeout(function(){
 						this.happychicken.kill();
 						this.happychicken = game.add.sprite(75,400,'happychicken4');
+						this.happySound.play();
 						setTimeout(function(){
 							this.happychicken.kill();
 						}.bind(this),500)
@@ -43,9 +46,11 @@ var playState = {
 
 				} else {
 					this.happychicken = game.add.sprite(575,400,'happychicken1');
+					this.happySound.play();
 					setTimeout(function(){
 						this.happychicken.kill();
 						this.happychicken = game.add.sprite(700,400,'happychicken3');
+						this.happySound.play();
 						setTimeout(function(){
 							this.happychicken.kill();
 						}.bind(this),500)
@@ -56,6 +61,7 @@ var playState = {
 			else
 			{
 				this.lives -= 1;
+				this.dropSound.play();
 				this.playerLife.text = 'life: ' + Math.round(this.lives);
 				if (egg.direction == 'left'){
 					this.brokenEgg = game.add.sprite(175,400,'brokenEgg');
@@ -72,7 +78,7 @@ var playState = {
 			if(this.lives <= 0)
 			{
 				//Change state to "Game Over"
-				// clearInterval(this.loop);
+				clearInterval(this.loop);
 				game.state.start('gameOver');
 
 
@@ -109,16 +115,21 @@ var playState = {
 		// show pause button
 		pause_label = game.add.button(720, 10, 'pausebutton',this.pause, this);
 
-		this.scoreLabel = game.add.text(game.world.centerX,50,'score: 0',{font: '18px Arial', fill: 'black'});
+		this.scoreLabel = game.add.text(game.world.centerX,50,'Score: 0',{font: '20px myLcsFont', fill: 'black'});
 		this.scoreLabel.anchor.setTo(0.5,0.5);
 		game.global.score = 0;
 		
-		this.playerLife = game.add.text(game.world.centerX,30,'Life: 3',{font: '18px Arial', fill: 'black'});
+		this.playerLife = game.add.text(game.world.centerX,30,'Life: 3',{font: '20px myLcsFont', fill: 'black'});
 		this.playerLife.anchor.setTo(0.5,0.5);
 		this.lives = 3;
 
 		this.nextEggTime = 0;
 		this.speedRoundTicks = 0;
+		this.speedSound = game.add.audio('speedSound');
+		this.happySound = game.add.audio('happySound');
+		this.catchSound = game.add.audio('catchSound');
+		this.laySound = game.add.audio('laySound');
+		this.dropSound = game.add.audio('dropSound');
 	},
 
 	pause: function()
@@ -160,7 +171,7 @@ var playState = {
 		{
 			if (game.global.score == 60 || game.global.score == 100 || game.global.score == 120){
 				this.lives += 1;
-				this.playerLife.text = 'life: ' + Math.round(this.lives);
+				this.playerLife.text = 'Life: ' + Math.round(this.lives);
 			}
 			
 			if(this.speedRoundTicks == 0 && game.global.score >= 10)
@@ -169,6 +180,7 @@ var playState = {
 				{
 					this.speedChicken = game.add.sprite(50,50,'speedchicken');
 					this.speedChicken.anchor.setTo(0.5,0.5);
+					this.speedSound.play();
 					this.speedRoundTicks = game.rnd.integerInRange(10,15);
 
 				}
@@ -176,6 +188,7 @@ var playState = {
 
 			var chicken = game.rnd.integerInRange(1, 4);
 			this.makeEgg((chicken == 1 || chicken == 3) ? 'top' : 'bottom', chicken <= 2 ? 'left' : 'right');
+			this.laySound.play();
 			this.nextEggTime = game.time.now + this.getDelay();
 
 			if(this.speedRoundTicks > 0)

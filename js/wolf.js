@@ -10,8 +10,8 @@ var Wolf = function Wolf(game)
 	this.game = game;
 	game.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.changeState('left','down'), this);
 	game.input.keyboard.addKey(Phaser.Keyboard.N).onDown.add(this.changeState('right','down'), this);
-	game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(this.changeState('left','up'), this);
-	game.input.keyboard.addKey(Phaser.Keyboard.K).onDown.add(this.changeState('right','up'), this);
+	game.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(this.changeState('left','up'), this);
+	game.input.keyboard.addKey(Phaser.Keyboard.J).onDown.add(this.changeState('right','up'), this);
 };
 
 Wolf.prototype = Object.create(Phaser.Sprite.prototype);

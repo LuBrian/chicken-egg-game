@@ -21,6 +21,14 @@ var loadState = {
 		game.load.image('happychicken2','assets/happyChicken2.png');
 		game.load.image('happychicken3','assets/happyChicken3.png');
 		game.load.image('happychicken4','assets/happyChicken4.png');
+
+		game.load.audio('speedSound','assets/speedchicken.wav');
+		game.load.audio('happySound','assets/happychicken.mp3');
+		game.load.audio('catchSound','assets/catchegg.mp3');
+		game.load.audio('laySound','assets/layeggs.mp3');
+		game.load.audio('dropSound','assets/dropeggs.mp3');
+		game.load.audio('gameoverSound','assets/gameoverSound1.mp3');
+
 	},
 	create:function() {
 		game.state.start('menu');
