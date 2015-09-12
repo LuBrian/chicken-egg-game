@@ -145,6 +145,7 @@ var playState = {
 		// Unpause the entire game
     this.paused = false;
     play_label.kill();
+    this.wolf.pause(this.paused);
     pause_label = game.add.button(720, 10, 'pausebutton',this.pause, this);
 	},
 

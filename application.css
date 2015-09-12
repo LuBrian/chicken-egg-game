@@ -3,11 +3,16 @@
 	src: url('assets/LLPIXEL3.ttf') format('truetype');
 }
 
+body {
+	height: 100%;
+	background-color: #2f9e17;
+	background-image: url(assets/sun1.png), url(assets/barn4.png),url(assets/dog.png);
+	background-position: left top, right center, 50px bottom;
+	background-repeat: no-repeat, no-repeat,no-repeat;
+}
 
 #gameDiv {
 	font-family:'myLcsFont';
-	margin: auto;
-	margin-top: 50px;
-  width: 60%;
-
+	margin: 0 auto;
+	width: 780px;
 }
