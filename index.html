@@ -4,6 +4,21 @@
 		<meta charset="utf-8" />
 		<title> Egg </title>
 		<link rel="stylesheet" href="application.css">
+		<style type="text/css">
+			@font-face {
+				font-family: 'myLcsFont';
+				src: url('./assets/LLPIXEL3.ttf') format('truetype');
+			}
+			.hiddenText {
+				font-family: 'myLcsFont';
+				visibility:hidden;
+			}
+		</style>
+
+	</head>
+	
+	<body>
+		<p class="hiddenText"> . </p>
 		<script type="text/javascript" src="phaser.js"></script>
 		<script type="text/javascript" src="js/load.js"></script>
 		<script type="text/javascript" src="js/menu.js"></script>
@@ -13,9 +28,7 @@
 		<script type="text/javascript" src="js/wolf.js"></script>
 		<script type="text/javascript" src="js/end.js"></script>
 		<script type="text/javascript" src="js/game.js"></script>
-	</head>
-	
-	<body>
 		<p id="gameDiv"></p>
+
 	</body>
 </html>
