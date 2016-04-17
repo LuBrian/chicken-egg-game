@@ -1,5 +1,6 @@
 # chicken-egg-game
 This is a local hosted Js Phaser game.
+
 1. Install http server: "npm install http-server -g"
 
 2. "http-server"\n
