@@ -3,7 +3,7 @@ This is a local hosted Js Phaser game.
 
 1. Install http server: "npm install http-server -g"
 
-2. "http-server"\n
+2. "http-server"
 
 3. Visit "http://localhost:8080"
 
